@@ -1,0 +1,55 @@
+{
+  "slug": "replace-me",
+  "title": "The Last Signal",
+  "premise": "A radio engineer hears a nightly message from a city that has never existed, and each answer changes a small memory she shares with her brother.",
+  "genre": ["science fiction", "mystery", "emotionally resonant drama"],
+  "tone": "Cinematic, tender, suspenseful, thoughtful; never cynical or cruel",
+  "target_audience": "General audiences 13+ who enjoy meaningful short mysteries and science fiction",
+  "visual_style": "Cinematic realism, midnight indigo and warm amber, 35mm texture, coherent wardrobes, no embedded text, no celebrity likenesses",
+  "content_rating": "PG",
+  "world_rules": [
+    "The mysterious frequency is heard only at 11:17 PM local time.",
+    "The broadcasts can alter one personal memory but cannot physically time-travel.",
+    "Every mystery clue must have a credible consequence in the same or next episode."
+  ],
+  "season_goal": "Mira must determine whether recovering her brother's lost memory is worth losing her own memory of their childhood.",
+  "story_principles": [
+    "Every episode has a real beginning, escalating problem, emotional reversal and meaningful partial resolution.",
+    "A cliffhanger may open a new question but must not replace the episode's payoff.",
+    "Vary the central dilemma, reveal, stakes and scene design; never repeat only a template.",
+    "Never change established world rules without a documented, plausible revelation."
+  ],
+  "characters": [
+    {
+      "id": "mira",
+      "name": "Mira Chen",
+      "age_range": "early 30s",
+      "appearance": "East Asian woman, shoulder-length wavy black hair, warm brown eyes, small crescent-shaped eyebrow scar",
+      "signature_wardrobe": "Indigo utility jacket, dark boots, silver star pendant",
+      "temperament": "Brave but guarded, compassionate, methodical",
+      "core_desire": "To reconnect with her estranged younger brother",
+      "fear_or_wound": "Fear that her past kindness toward him was too little and too late",
+      "speech_style": "Measured, warm, sometimes breathless when worried",
+      "relationships": {"elias": "Older sister who regrets years of distance"},
+      "reference_images": []
+    },
+    {
+      "id": "elias",
+      "name": "Elias Chen",
+      "age_range": "late 20s",
+      "appearance": "East Asian man, short straight dark hair, gentle eyes, faint dimple on left cheek",
+      "signature_wardrobe": "Tan wool coat, dark green scarf",
+      "temperament": "Funny under pressure, patient, observant",
+      "core_desire": "To trust his sister again",
+      "fear_or_wound": "Believes everyone eventually leaves him",
+      "speech_style": "Quiet, teasing, soft spoken",
+      "relationships": {"mira": "Younger brother who wants to reconcile"},
+      "reference_images": []
+    }
+  ],
+  "voices": {
+    "narrator": {"env_key": "ELEVENLABS_VOICE_ID", "model_id": "eleven_multilingual_v2", "stability": 0.55, "similarity_boost": 0.75, "style": 0.0, "speed": 1.0},
+    "mira": {"env_key": "ELEVENLABS_MIRA_VOICE_ID", "model_id": "eleven_multilingual_v2", "stability": 0.55, "similarity_boost": 0.75, "style": 0.0, "speed": 1.0},
+    "elias": {"env_key": "ELEVENLABS_ELIAS_VOICE_ID", "model_id": "eleven_multilingual_v2", "stability": 0.55, "similarity_boost": 0.75, "style": 0.0, "speed": 1.0}
+  }
+}

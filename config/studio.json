@@ -1,0 +1,105 @@
+{
+  "_about": "Standing authorization for autonomous fiction production. Claude Code runs the full workflow (series -> cast -> script -> paid media -> render -> QC -> canon) without stopping for human approval, but never above these caps, never uploading, never buying credits.",
+  "autonomous_mode": true,
+  "authorized_by": "project owner",
+  "authorized_on": "2026-11-20",
+  "episode_caps": {
+    "max_fal_usd": 6.0,
+    "max_voice_credits": 10000,
+    "motion_seconds": 30
+  },
+  "monthly_caps": {
+    "max_total_usd": 40.0
+  },
+  "format": {
+    "master": "master_9x16.mp4",
+    "width": 1080,
+    "height": 1920,
+    "min_seconds": 60,
+    "max_seconds": 90,
+    "target_min_seconds": 75,
+    "target_max_seconds": 85,
+    "fps": 30,
+    "_about": "Measured runtime incl. any titles/credits. produce-episode stops after the voice track (before image spend) if outside min-max; QC fails the master outside it."
+  },
+  "assets_policy": "Only original AI-generated media: locked bible references (fal FLUX 2 Flash), motion shots from the configured fal reference-to-video model, fal lip-sync, ElevenLabs roster voices from bible/voices.json, and owner-licensed or AI-generated music/SFX with provenance. No stock, web, celebrity, franchise or real-person imagery.",
+  "never_automatic": [
+    "uploading or publishing",
+    "deleting outputs or canon (exception: after approve, a story-folder episode's own manifest-listed scratch files are removed, per the owner's 2026-11-21 production brief)",
+    "changing accounts or credentials",
+    "buying credits",
+    "voice cloning"
+  ],
+  "music": {
+    "default_source": "ai",
+    "ai_provider": "ElevenLabs Music (music_v2_5), 900 credits/min, counted in max_voice_credits",
+    "library": "assets/music/provenance.json (owner-licensed tracks only)"
+  },
+  "director": {
+    "_about": "Deterministic motion-first pipeline (director.py). Money caps are NOT set here: the director uses episode_caps and monthly_caps above. Only the owner changes caps.",
+    "shows_dir": "shows",
+    "motion_model": "seedance25_r2v",
+    "motion_resolution": "720p",
+    "lipsync_model": "sync_lipsync_v2",
+    "stt_model": "scribe_v2",
+    "voice_model_id": "eleven_multilingual_v2",
+    "max_retries_per_shot": 2,
+    "episode_format": {
+      "min_seconds": 84,
+      "max_seconds": 96,
+      "target_seconds": 90,
+      "min_shots": 15,
+      "max_shots": 22,
+      "shot_min_seconds": 3.0,
+      "shot_max_seconds": 6.0,
+      "dialogue_lead_seconds": 0.25,
+      "dialogue_tail_seconds": 0.2
+    },
+    "render": {
+      "width": 1080,
+      "height": 1920,
+      "wide_width": 1920,
+      "wide_height": 1080,
+      "fps": 30,
+      "crf": 18,
+      "max_upscale_16x9": 1.5
+    },
+    "audio": {
+      "dialogue_lufs": -16,
+      "ambience_lufs": -34,
+      "sfx_lufs": -22,
+      "music_lufs": -26,
+      "master_lufs": -14,
+      "true_peak_db": -1.5,
+      "loudness_tolerance_lu": 1.5,
+      "duck_threshold": 0.02,
+      "duck_ratio": 8,
+      "duck_attack_ms": 20,
+      "duck_release_ms": 400
+    },
+    "qa": {
+      "max_freeze_fraction": 0.4,
+      "freeze_noise": 0.003,
+      "min_face_frames_for_lipsync": 0.6,
+      "max_word_error_rate": 0.25,
+      "duration_tolerance_seconds": 0.15,
+      "identity_distance_warn": null,
+      "_identity_note": "Disabled 2026-11-22: Apple Vision feature-print distance did not separate people in the pilot (same person 0.76-1.00, different person 0.92-1.20). Identity is checked in the frame review."
+    },
+    "compilation": {
+      "min_minutes": 8,
+      "max_minutes": 10,
+      "bumper_seconds": 2.5
+    },
+    "upload": {
+      "default_privacy": "unlisted",
+      "allowed_privacy": [
+        "private",
+        "unlisted"
+      ],
+      "promote_to_public": "manual (owner in YouTube Studio)"
+    },
+    "lipsync_mode": "native",
+    "_lipsync_mode_note": "native = the motion model (Seedance 2.5 reference-to-video) lip-syncs to our ElevenLabs line passed as @Audio1 in the same call (works with FAL_KEY alone). post = separate fal lip-sync endpoint (Sync Lipsync 2.0) on the motion clip; needs fal-client for CDN uploads."
+  }
+}

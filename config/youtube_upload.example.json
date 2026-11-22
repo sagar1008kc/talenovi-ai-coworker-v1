@@ -1,0 +1,13 @@
+{
+  "expected_channel_id": "UCxxxxxxxxxxxxxxxxxxxxxx",
+  "category_id": "24",
+  "contains_synthetic_media": true,
+  "min_hours_between_uploads": 24,
+  "default_hashtags": [
+    "Shorts",
+    "ShortStory"
+  ],
+  "privacy": "unlisted",
+  "_privacy_note": "private or unlisted only. Promotion to public is manual in YouTube Studio (the app's scopes cannot change privacy, by design).",
+  "_setup": "Copy to config/youtube_upload.json and set expected_channel_id to YOUR channel ID (YouTube Studio > Settings > Channel > Advanced). Uploads refuse any other channel."
+}

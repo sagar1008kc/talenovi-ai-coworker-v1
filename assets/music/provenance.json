@@ -1,0 +1,15 @@
+{
+  "_about": "Owner-supplied music. Only tracks with commercial_use_confirmed=true are used automatically. Recordings carry their own copyright even when the composition is public domain.",
+  "tracks": [
+    {
+      "file": "vivaldi_winter_largo_golden_cut_reborn.mp3",
+      "title": "Winter, Largo from The Four Seasons, Op. 8 (Antonio Vivaldi), Golden Cut Reborn",
+      "license": "YouTube Audio Library (per owner, 2026-11-20). Free for use in YouTube videos including monetized ones; check the library's attribution requirement for this track. Use outside YouTube (e.g. TikTok) is not confirmed.",
+      "commercial_use_confirmed": true,
+      "platforms_confirmed": ["youtube"],
+      "source_url": "https://studio.youtube.com (Audio Library)",
+      "mood": "tender, wistful, wintry, slow strings with pizzicato",
+      "duration_seconds": 116.4
+    }
+  ]
+}

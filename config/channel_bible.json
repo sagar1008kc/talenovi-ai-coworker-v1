@@ -1,0 +1,13 @@
+{
+  "brand": "TaleNovi Studio",
+  "handle": "@TaleNoviStudio",
+  "tagline": "Where New Worlds Become Stories.",
+  "audience": "General audiences who enjoy imaginative, emotionally meaningful cinematic stories",
+  "tone": "Original, cinematic, intelligent, warm and suspenseful, PG / family-safe",
+  "visual_style": "Original filmic images, crisp framing, consistent character wardrobe, controlled indigo-and-amber color palette, no celebrity likenesses, no embedded text",
+  "narrator": "Warm English narrator using one approved persistent voice ID and fixed settings",
+  "genre": ["mystery", "science fiction", "fantasy", "emotionally resonant stories"],
+  "forbidden": ["copying internet or social-media scripts", "paraphrased viral stories", "unlicensed characters or music", "celebrity voice impersonation", "vulgarity", "explicit sexual content", "graphic violence", "hate", "formulaic mass production"],
+  "delivery": {"formats": ["16:9 1920x1080 YouTube", "9:16 1080x1920 YouTube Shorts and TikTok"], "episode_seconds": 75, "publishing": "human approval only"},
+  "continuity_rule": "Each original series has a locked bible and an approved-only canon ledger. Always review both before scripting another part."
+}

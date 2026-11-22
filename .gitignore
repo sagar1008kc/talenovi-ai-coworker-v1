@@ -1,0 +1,55 @@
+# Credentials (never commit)
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+
+# Media & runtime working state
+outputs/
+renders/
+*.mp4
+*.mov
+*.mp3
+*.wav
+*.webm
+*.sqlite
+*.sqlite3
+*.db
+*.log
+logs/
+.cache/
+
+# Local Claude Code and OS state
+.claude/settings.local.json
+.DS_Store
+Thumbs.db
+
+# Autopilot run state (spend ledger, topic history, locks)
+state/
+# Local secrets written by `elevenlabs onboard`
+/.env
+
+# Personal productions, media and reports (local only: large, and they contain
+# account request IDs, costs and absolute paths)
+series/
+shows/
+uploads/
+outputs/
+renders/
+
+# Account-specific config (copy the *.example.json files)
+config/youtube_upload.json
+config/voice_roster.json
+
+# Locally compiled helpers
+tools/bin/

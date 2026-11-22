@@ -1,0 +1,36 @@
+{
+  "niche": "Real-world science and history mysteries explained clearly (natural phenomena, engineering, archaeology)",
+  "audience": "Curious general audiences 13+ who want accurate, well-told explanations",
+  "channel_brief": "Calm, intelligent, wonder-driven narration. Original explanations with concrete examples. Never sensational; correct common myths with evidence.",
+  "visual_style": "Cinematic documentary realism, natural light, rich but restrained color grade, 35mm film texture, consistent palette across the video",
+  "videos_per_run": 1,
+  "script_review": "human",
+  "schedule": {"hour": 3, "minute": 15, "every_n_days": 1},
+  "budget": {"max_usd_per_video": 20.0, "max_usd_per_run": 20.0, "max_usd_per_month": 150.0},
+  "claude": {"model": "claude-opus-5-5", "effort": "high", "research_searches": 8},
+  "image_model": "flux2_flash",
+  "video": {
+    "fallback_order": ["wan3_i2v", "veo31_fast_i2v", "kling4_i2v", "seedance25_i2v", "flux3max_i2v", "runway_gen45_i2v"],
+    "resolution": "720p",
+    "max_motion_shots_long": 8,
+    "max_motion_shots_short": 3,
+    "min_motion_shot_seconds": 3.0,
+    "timeout_minutes": 20
+  },
+  "voice": {
+    "env_key": "ELEVENLABS_VOICE_ID",
+    "model_id": "eleven_multilingual_v2",
+    "stability": 0.5,
+    "similarity_boost": 0.75,
+    "style": 0.0,
+    "speed": 1.0,
+    "usd_per_1k_characters": null,
+    "commercial_license_confirmed": false
+  },
+  "music": {"library_dir": "assets/music", "volume_db": -20},
+  "long_form_words": [1250, 1450],
+  "short_words": [90, 130],
+  "dedupe_similarity": 0.62,
+  "max_stage_attempts": 3,
+  "ai_frame_review": true
+}
