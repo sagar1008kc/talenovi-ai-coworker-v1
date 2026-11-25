@@ -46,6 +46,7 @@ ALLOWED_PRIVACY = ("private", "unlisted")   # never "public": promotion stays ma
 MAX_TITLE_CHARS = 100
 MAX_DESCRIPTION_BYTES = 5000
 MAX_HASHTAGS = 15  # YouTube ignores *all* hashtags on a video with more than 15
+MAX_TAGS_CHARS = 500  # snippet.tags: YouTube's limit on the combined keyword-tag length
 RETRYABLE_STATUS = {500, 502, 503, 504}
 MAX_RETRIES = 8
 
@@ -163,6 +164,8 @@ class UploadPlan:
     category_id: str
     contains_synthetic_media: bool
     privacy: str = PRIVACY
+    tags: tuple[str, ...] = ()            # snippet.tags (search keywords, not shown to viewers)
+    made_for_kids: bool | None = None     # status.selfDeclaredMadeForKids; None = channel default
 
     def body(self) -> dict:
         if self.privacy not in ALLOWED_PRIVACY:
@@ -170,10 +173,12 @@ class UploadPlan:
         status = {"privacyStatus": self.privacy}
         if self.contains_synthetic_media:
             status["containsSyntheticMedia"] = True
-        return {
-            "snippet": {"title": self.title, "description": self.description, "categoryId": self.category_id},
-            "status": status,
-        }
+        if self.made_for_kids is not None:
+            status["selfDeclaredMadeForKids"] = bool(self.made_for_kids)
+        snippet = {"title": self.title, "description": self.description, "categoryId": self.category_id}
+        if self.tags:
+            snippet["tags"] = list(self.tags)
+        return {"snippet": snippet, "status": status}
 
     def preview(self) -> str:
         size_mb = self.video.stat().st_size / 1_000_000
@@ -182,6 +187,7 @@ class UploadPlan:
             f"Title:       {self.title}",
             f"Visibility:  {self.privacy}",
             f"AI label:    {'containsSyntheticMedia = true' if self.contains_synthetic_media else 'not set'}",
+            *([f"Tags:        {', '.join(self.tags)}"] if self.tags else []),
             "Description:",
             *("  | " + line for line in self.description.split("\n")),
         ])
@@ -214,6 +220,18 @@ def make_plan(video: str | Path, story: str, episode: int, title: str, summary: 
         contains_synthetic_media=bool(cfg["contains_synthetic_media"]),
         privacy=_privacy(cfg),
     )
+
+
+def check_tags(tags: list[str] | tuple[str, ...]) -> tuple[str, ...]:
+    """Validate snippet.tags: no '<'/'>', and at most MAX_TAGS_CHARS in total (YouTube counts a tag
+    containing a space as if it were quoted, i.e. +2 characters, plus one separator per tag)."""
+    out = tuple(t.strip() for t in tags if str(t).strip())
+    for t in out:
+        _check_text("tags", t)
+    total = sum(len(t) + (2 if " " in t else 0) for t in out) + max(0, len(out) - 1)
+    if total > MAX_TAGS_CHARS:
+        raise UploadError(f"Keyword tags total {total} characters; YouTube allows {MAX_TAGS_CHARS}.")
+    return out
 
 
 def _privacy(cfg: dict) -> str:
@@ -302,7 +320,8 @@ def _keyring():
     return keyring
 
 
-def load_credentials(*, interactive: bool, client_secrets: Path = DEFAULT_CLIENT_SECRETS):
+def load_credentials(*, interactive: bool, client_secrets: Path = DEFAULT_CLIENT_SECRETS,
+                     keyring_user: str = KEYRING_USER, expected_channel: str | None = None):
     """Return valid OAuth credentials from the OS keychain, refreshing them if
     needed. When none are stored and `interactive` is true, open the browser
     for consent (offline access, account/channel picker)."""
@@ -311,7 +330,7 @@ def load_credentials(*, interactive: bool, client_secrets: Path = DEFAULT_CLIENT
     from google.oauth2.credentials import Credentials
 
     kr = _keyring()
-    stored = kr.get_password(KEYRING_SERVICE, KEYRING_USER)
+    stored = kr.get_password(KEYRING_SERVICE, keyring_user)
     creds = None
     if stored:
         try:
@@ -327,7 +346,7 @@ def load_credentials(*, interactive: bool, client_secrets: Path = DEFAULT_CLIENT
     if creds and creds.refresh_token:
         try:
             creds.refresh(Request())
-            kr.set_password(KEYRING_SERVICE, KEYRING_USER, creds.to_json())
+            kr.set_password(KEYRING_SERVICE, keyring_user, creds.to_json())
             return creds
         except RefreshError:
             creds = None  # revoked or expired (e.g. OAuth app left in "Testing" mode: 7-day tokens)
@@ -335,7 +354,7 @@ def load_credentials(*, interactive: bool, client_secrets: Path = DEFAULT_CLIENT
         raise NotAuthorized(
             "YouTube is not authorized (or the stored authorization expired). "
             "Run: .venv/bin/python youtube_queue.py authorize")
-    return authorize(client_secrets)
+    return authorize(client_secrets, expected_channel=expected_channel, keyring_user=keyring_user)
 
 
 def authorized_channel(youtube) -> tuple[str, str]:
@@ -362,7 +381,8 @@ def check_channel(youtube, expected: str | None) -> tuple[str, str]:
     return channel_id, title
 
 
-def authorize(client_secrets: Path = DEFAULT_CLIENT_SECRETS, expected_channel: str | None = None):
+def authorize(client_secrets: Path = DEFAULT_CLIENT_SECRETS, expected_channel: str | None = None,
+              keyring_user: str = KEYRING_USER):
     import logging
     from google_auth_oauthlib.flow import InstalledAppFlow
 
@@ -386,19 +406,19 @@ def authorize(client_secrets: Path = DEFAULT_CLIENT_SECRETS, expected_channel: s
     try:
         channel_id, title = check_channel(youtube, expected)
     except UploadError:
-        forget_credentials()  # never keep a sign-in for the wrong channel
+        forget_credentials(keyring_user)  # never keep a sign-in for the wrong channel
         raise
-    _keyring().set_password(KEYRING_SERVICE, KEYRING_USER, creds.to_json())
+    _keyring().set_password(KEYRING_SERVICE, keyring_user, creds.to_json())
     print(f"Signed in to channel '{title}' ({channel_id}).")
     print("Authorization saved in the macOS Keychain (service 'talenovi-youtube-uploader').")
     return creds
 
 
-def forget_credentials() -> bool:
+def forget_credentials(keyring_user: str = KEYRING_USER) -> bool:
     kr = _keyring()
-    if kr.get_password(KEYRING_SERVICE, KEYRING_USER) is None:
+    if kr.get_password(KEYRING_SERVICE, keyring_user) is None:
         return False
-    kr.delete_password(KEYRING_SERVICE, KEYRING_USER)
+    kr.delete_password(KEYRING_SERVICE, keyring_user)
     return True
 
 
@@ -459,7 +479,8 @@ class UploadResult:
 def upload(plan: UploadPlan, *, interactive: bool, client_secrets: Path = DEFAULT_CLIENT_SECRETS,
            ledger_path: Path = LEDGER_PATH, config: dict | None = None,
            progress: Callable[[float], None] | None = None, service_factory=None,
-           take_lock: bool = True, replace_previous: bool = False) -> UploadResult:
+           take_lock: bool = True, replace_previous: bool = False,
+           keyring_user: str = KEYRING_USER) -> UploadResult:
     """Upload one video as unlisted, recording it in the ledger. Refuses duplicates.
     Pass take_lock=False only when the caller already holds `upload_lock()`."""
     cfg = config or load_config()
@@ -480,7 +501,8 @@ def upload(plan: UploadPlan, *, interactive: bool, client_secrets: Path = DEFAUL
 
         if service_factory is None:
             from googleapiclient.discovery import build
-            creds = load_credentials(interactive=interactive, client_secrets=client_secrets)
+            creds = load_credentials(interactive=interactive, client_secrets=client_secrets,
+                                     keyring_user=keyring_user, expected_channel=cfg.get("expected_channel_id"))
             youtube = build("youtube", "v3", credentials=creds, cache_discovery=False)
         else:
             youtube = service_factory()

@@ -49,7 +49,11 @@ renders/
 
 # Account-specific config (copy the *.example.json files)
 config/youtube_upload.json
+config/promo_youtube.json
 config/voice_roster.json
 
 # Locally compiled helpers
 tools/bin/
+
+# Promo Shorts rendered locally from promo/<campaign>/images (regenerable)
+promo/*/videos/
