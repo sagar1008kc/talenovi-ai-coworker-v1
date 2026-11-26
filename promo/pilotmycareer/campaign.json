@@ -10,8 +10,36 @@
     "_audio_note": "null = silent stereo track. The YouTube Data API cannot attach YouTube's own or trending Shorts sounds; add one in the YouTube mobile app if you want it. A file here must be listed in assets/music/provenance.json with commercial_use_confirmed and platforms_confirmed including youtube."
   },
   "description_template": "{hook}\n\nPilotMyCareer is a free AI Resume Matcher and Resume Builder:\n1. Paste or upload your resume (PDF, DOCX or text) and the job description.\n2. Review your match: a score with supporting evidence, the skills and keywords you're missing, and priority fixes.\n3. Build and download a resume tailored to that role, without inventing experience.\n\n{audience}\n\nTry your first match free, no account needed: {site}\n\nAI can make mistakes: check every suggestion against your real experience before you use it. Results don't guarantee interviews or job offers. The people and scenes in this video are AI-generated.\n\nRelated: resume vs job description, resume match score, tailor resume to job description, resume keywords, missing skills, AI resume builder, free resume builder, job search tips, how to get interview calls.\n\n{hashtags}",
-  "base_hashtags": ["Shorts", "ResumeTips", "JobSearch", "ResumeBuilder", "ResumeMatcher", "AIResume", "JobDescription", "CareerTips", "JobHunting", "JobSeekers", "PilotMyCareer"],
-  "base_tags": ["PilotMyCareer", "pilotmycareer.com", "resume matcher", "resume job description match", "resume match score", "tailor resume to job description", "AI resume builder", "free resume builder", "resume keywords", "resume gap analysis", "resume tips", "job search tips", "job application tips", "how to get interview calls", "career tips"],
+  "base_hashtags": [
+    "Shorts",
+    "ResumeTips",
+    "JobSearch",
+    "ResumeBuilder",
+    "ResumeMatcher",
+    "AIResume",
+    "JobDescription",
+    "CareerTips",
+    "JobHunting",
+    "JobSeekers",
+    "PilotMyCareer"
+  ],
+  "base_tags": [
+    "PilotMyCareer",
+    "pilotmycareer.com",
+    "resume matcher",
+    "resume job description match",
+    "resume match score",
+    "tailor resume to job description",
+    "AI resume builder",
+    "free resume builder",
+    "resume keywords",
+    "resume gap analysis",
+    "resume tips",
+    "job search tips",
+    "job application tips",
+    "how to get interview calls",
+    "career tips"
+  ],
   "posts": [
     {
       "id": 1,
@@ -20,8 +48,14 @@
       "title": "Not getting interview calls? Match your resume to the job first",
       "hook": "Not getting interview calls? Stop applying randomly. Paste your resume and the job description and see exactly where you match and what's missing, before you hit apply.",
       "audience": "Built for everyone job hunting: working professionals, career changers, IT and tech professionals, students and new grads.",
-      "hashtags": ["InterviewTips", "ApplySmarter"],
-      "tags": ["not getting interview calls", "stop applying randomly"]
+      "hashtags": [
+        "InterviewTips",
+        "ApplySmarter"
+      ],
+      "tags": [
+        "not getting interview calls",
+        "stop applying randomly"
+      ]
     },
     {
       "id": 2,
@@ -30,8 +64,15 @@
       "title": "Working professionals: tailor your resume to the role you want",
       "hook": "Going for your next role? One generic resume rarely fits every job. Check how your resume matches the job description, see the gaps, and fix the highest-priority ones first.",
       "audience": "For working professionals, managers and career changers moving up or moving on.",
-      "hashtags": ["CareerGrowth", "CareerChange"],
-      "tags": ["resume for experienced professionals", "career change resume", "resume for promotion"]
+      "hashtags": [
+        "CareerGrowth",
+        "CareerChange"
+      ],
+      "tags": [
+        "resume for experienced professionals",
+        "career change resume",
+        "resume for promotion"
+      ]
     },
     {
       "id": 3,
@@ -40,8 +81,17 @@
       "title": "Students & new grads: see what your resume is missing for the job",
       "hook": "First job or internship? Match your resume to the job description, spot the skills and keywords recruiters are looking for, and improve it before you apply.",
       "audience": "For students, freshers, new grads and anyone applying for internships or entry-level jobs.",
-      "hashtags": ["NewGrad", "Internship"],
-      "tags": ["resume for students", "new grad resume", "fresher resume", "internship resume", "first job resume"]
+      "hashtags": [
+        "NewGrad",
+        "Internship"
+      ],
+      "tags": [
+        "resume for students",
+        "new grad resume",
+        "fresher resume",
+        "internship resume",
+        "first job resume"
+      ]
     },
     {
       "id": 4,
@@ -50,8 +100,17 @@
       "title": "IT pros: find the skills your resume is missing for any tech job",
       "hook": "Every tech job description asks for a different stack. Compare your resume to the posting, find the missing skills and tools, and build a stronger, tailored tech resume.",
       "audience": "For software engineers, developers, data, cloud, QA and IT support professionals.",
-      "hashtags": ["TechJobs", "ITJobs"],
-      "tags": ["IT resume", "tech resume", "software engineer resume", "developer resume", "resume skills for tech jobs"]
+      "hashtags": [
+        "TechJobs",
+        "ITJobs"
+      ],
+      "tags": [
+        "IT resume",
+        "tech resume",
+        "software engineer resume",
+        "developer resume",
+        "resume skills for tech jobs"
+      ]
     },
     {
       "id": 5,
@@ -60,8 +119,15 @@
       "title": "Stop applying randomly: check your resume match score for free",
       "hook": "Sending the same resume to 50 jobs? Check your match score for the one you really want, find the gaps, and get a tailored resume for that role.",
       "audience": "For anyone job hunting who wants fewer, better applications.",
-      "hashtags": ["ApplySmarter", "JobApplication"],
-      "tags": ["resume score checker", "resume match checker free", "check resume against job description"]
+      "hashtags": [
+        "ApplySmarter",
+        "JobApplication"
+      ],
+      "tags": [
+        "resume score checker",
+        "resume match checker free",
+        "check resume against job description"
+      ]
     },
     {
       "id": 6,
@@ -70,8 +136,16 @@
       "title": "This resume scored 18/100 for a Business Analyst job. Here's why",
       "hook": "18 out of 100. This sample resume copied the job posting's wording but showed no real employers, dates or results. The match report flags what's missing and what to fix first.",
       "audience": "For anyone whose resume looks right on paper but still isn't getting replies.",
-      "hashtags": ["BusinessAnalyst", "ResumeMistakes"],
-      "tags": ["resume mistakes", "why my resume gets rejected", "business analyst resume", "resume feedback"]
+      "hashtags": [
+        "BusinessAnalyst",
+        "ResumeMistakes"
+      ],
+      "tags": [
+        "resume mistakes",
+        "why my resume gets rejected",
+        "business analyst resume",
+        "resume feedback"
+      ]
     },
     {
       "id": 7,
@@ -80,8 +154,17 @@
       "title": "Research students: present your experience clearly on your resume",
       "hook": "Lab work, papers and projects count, if a recruiter can see how they fit the role. Align your resume to the job description and present your experience more clearly.",
       "audience": "For research students, PhD and master's candidates applying for internships, research roles and graduate programs.",
-      "hashtags": ["GradSchool", "ResearchJobs"],
-      "tags": ["research resume", "academic CV to resume", "PhD resume", "graduate student resume", "research internship"]
+      "hashtags": [
+        "GradSchool",
+        "ResearchJobs"
+      ],
+      "tags": [
+        "research resume",
+        "academic CV to resume",
+        "PhD resume",
+        "graduate student resume",
+        "research internship"
+      ]
     },
     {
       "id": 8,
@@ -90,8 +173,15 @@
       "title": "Get your resume job-ready with AI: match, find gaps, build",
       "hook": "Three steps: match your resume to your dream job, find the gaps with clear fixes, and build a tailored resume ready to download.",
       "audience": "For job seekers at every stage, from first job to senior roles.",
-      "hashtags": ["JobReady", "ResumeHelp"],
-      "tags": ["job ready resume", "resume help", "AI resume checker"]
+      "hashtags": [
+        "JobReady",
+        "ResumeHelp"
+      ],
+      "tags": [
+        "job ready resume",
+        "resume help",
+        "AI resume checker"
+      ]
     },
     {
       "id": 9,
@@ -100,8 +190,15 @@
       "title": "How well does your resume match the job? Check your score",
       "hook": "Your resume might be strong, but is it strong for this job? Get a match score against the job description, see what's missing, and get a stronger resume.",
       "audience": "For job seekers who want to know where they stand before they apply.",
-      "hashtags": ["ResumeScore", "ApplySmarter"],
-      "tags": ["resume match percentage", "resume score", "how to match resume to job"]
+      "hashtags": [
+        "ResumeScore",
+        "ApplySmarter"
+      ],
+      "tags": [
+        "resume match percentage",
+        "resume score",
+        "how to match resume to job"
+      ]
     },
     {
       "id": 10,
@@ -110,8 +207,15 @@
       "title": "Before you apply: match your resume to the job description",
       "hook": "Five minutes before you apply can save you weeks of silence. Match your resume to the job, get gap insights, and build a better resume.",
       "audience": "For new grads, interns and anyone starting a new chapter.",
-      "hashtags": ["NewGrad", "FirstJob"],
-      "tags": ["resume before applying", "job application checklist", "entry level resume"]
+      "hashtags": [
+        "NewGrad",
+        "FirstJob"
+      ],
+      "tags": [
+        "resume before applying",
+        "job application checklist",
+        "entry level resume"
+      ]
     },
     {
       "id": 11,
@@ -120,8 +224,15 @@
       "title": "Resume + job description matcher: fix the gaps before you apply",
       "hook": "Update your resume, match it to jobs, and get clear, actionable fixes, all in one place.",
       "audience": "For professionals and students who want every application tailored, not copy-pasted.",
-      "hashtags": ["ResumeHelp", "JobApplication"],
-      "tags": ["resume and job description matcher", "resume fixes", "tailored resume"]
+      "hashtags": [
+        "ResumeHelp",
+        "JobApplication"
+      ],
+      "tags": [
+        "resume and job description matcher",
+        "resume fixes",
+        "tailored resume"
+      ]
     },
     {
       "id": 12,
@@ -130,8 +241,15 @@
       "title": "Paste your resume and the job description. See what's missing",
       "hook": "No sign-up for your first match. Paste your resume, paste the job description, and see your score, the gaps and what to fix first.",
       "audience": "For anyone who wants a quick, honest check before applying.",
-      "hashtags": ["ResumeCheck", "FreeTools"],
-      "tags": ["free resume checker", "paste resume check", "resume checker no sign up"]
+      "hashtags": [
+        "ResumeCheck",
+        "FreeTools"
+      ],
+      "tags": [
+        "free resume checker",
+        "paste resume check",
+        "resume checker no sign up"
+      ]
     },
     {
       "id": 13,
@@ -140,8 +258,49 @@
       "title": "An AI resume builder that never invents your experience",
       "hook": "Match your resume to any job, find and fix the gaps, and build a professional resume tailored to the role, using only experience you really have.",
       "audience": "For professionals who want AI help without fake claims on their resume.",
-      "hashtags": ["HonestResume", "CareerTips"],
-      "tags": ["honest AI resume builder", "professional resume builder", "resume builder for professionals"]
+      "hashtags": [
+        "HonestResume",
+        "CareerTips"
+      ],
+      "tags": [
+        "honest AI resume builder",
+        "professional resume builder",
+        "resume builder for professionals"
+      ]
+    },
+    {
+      "id": 14,
+      "image": "images/14-pilot-uniform-match-score.webp",
+      "image_sha256": "35cc33f99d0235c3520d443b1937d9bf93e0eac946a4b4ddd4c5932f3e49239f",
+      "title": "Pilot your job search: get a match score before you apply",
+      "hook": "Take the controls of your job search. Get a match score for the role you want, spot the gaps in your resume, and build a tailored version you can download and apply with.",
+      "audience": "For working professionals, career changers and anyone aiming for a specific role.",
+      "hashtags": [
+        "CareerMove",
+        "ApplySmarter"
+      ],
+      "tags": [
+        "job match score",
+        "resume gaps",
+        "career move resume"
+      ]
+    },
+    {
+      "id": 15,
+      "image": "images/15-pilot-uniform-career-move.webp",
+      "image_sha256": "c7f43a6bdb1546b3c82c2bad9f02159c00285e68a4f2a68f262cbb2613cedb68",
+      "title": "Planning your next career move? Build a resume that fits the role",
+      "hook": "Your next move starts with a resume that fits the job. See how well your resume matches, get role-based suggestions to fix the gaps, and create a tailored, job-ready resume.",
+      "audience": "For professionals switching roles, industries or cities, and anyone preparing their next application.",
+      "hashtags": [
+        "CareerChange",
+        "NextCareerMove"
+      ],
+      "tags": [
+        "next career move",
+        "career change resume",
+        "tailored resume builder"
+      ]
     }
   ]
 }
