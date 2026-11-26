@@ -4,12 +4,17 @@
   "site": "https://www.pilotmycareer.com",
   "_about": "Owner-authorized promo Shorts (2026-11-25): one ad image per Short, uploaded by promo_queue.py every 12 h, private or unlisted only. Posts upload in the order listed; ids are permanent (never renumber, never reuse). Add new posts at the end with the next id.",
   "video": {
-    "seconds": 10,
+    "seconds": 15,
+    "min_seconds": 10,
     "zoom": 0.04,
-    "audio_file": null,
-    "_audio_note": "null = silent stereo track. The YouTube Data API cannot attach YouTube's own or trending Shorts sounds; add one in the YouTube mobile app if you want it. A file here must be listed in assets/music/provenance.json with commercial_use_confirmed and platforms_confirmed including youtube."
+    "audio_rotation": [
+      "dyalla_bodega_cat_loop.mp3",
+      "battle_crowd_celebration.mp3",
+      "baila_mi_cumbia_sting.mp3"
+    ],
+    "_audio_note": "Each post gets the next track in audio_rotation by post id (1, 4, 7...: first track; 2, 5, 8...: second; 3, 6, 9...: third). A post may set its own audio_file (null = silent). Shorts last min(seconds, track length), at least min_seconds. Tracks must be listed in assets/music/provenance.json with commercial use and YouTube confirmed; the mp3 files themselves are not in git."
   },
-  "description_template": "{hook}\n\nPilotMyCareer is a free AI Resume Matcher and Resume Builder:\n1. Paste or upload your resume (PDF, DOCX or text) and the job description.\n2. Review your match: a score with supporting evidence, the skills and keywords you're missing, and priority fixes.\n3. Build and download a resume tailored to that role, without inventing experience.\n\n{audience}\n\nTry your first match free, no account needed: {site}\n\nAI can make mistakes: check every suggestion against your real experience before you use it. Results don't guarantee interviews or job offers. The people and scenes in this video are AI-generated.\n\nRelated: resume vs job description, resume match score, tailor resume to job description, resume keywords, missing skills, AI resume builder, free resume builder, job search tips, how to get interview calls.\n\n{hashtags}",
+  "description_template": "{hook}\n\nPilotMyCareer is a free AI Resume Matcher and Resume Builder:\n1. Paste or upload your resume (PDF, DOCX or text) and the job description.\n2. Review your match: a score with supporting evidence, the skills and keywords you're missing, and priority fixes.\n3. Build and download a resume tailored to that role, without inventing experience.\n\n{audience}\n\nTry your first match free, no account needed: {site}\n\nAI can make mistakes: check every suggestion against your real experience before you use it. Results don't guarantee interviews or job offers. The people and scenes in this video are AI-generated.\n\n{music}\n\nRelated: resume vs job description, resume match score, tailor resume to job description, resume keywords, missing skills, AI resume builder, free resume builder, job search tips, how to get interview calls.\n\n{hashtags}",
   "base_hashtags": [
     "Shorts",
     "ResumeTips",

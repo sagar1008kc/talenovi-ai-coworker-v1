@@ -65,9 +65,10 @@ channel pinned in `config/promo_youtube.json` (its own Keychain sign-in, ledger
 
 Claims in titles and descriptions must match what the site really does (free first match on the
 device, no account needed; downloads need a free account; never invents experience; no guarantee
-of interviews). Keep the AI-generated disclosure line. YouTube's API cannot attach trending or
-library sounds: the Shorts carry a silent track unless `video.audio_file` names a track listed in
-`assets/music/provenance.json` with YouTube confirmed. The owner can add a sound in the YouTube app.
+of interviews). Keep the AI-generated disclosure line. Music: the three tracks in `video.audio_rotation`
+rotate by post id (Shorts are 10-15 s, matched to the track). If a run fails with "Music file missing",
+the owner must copy that mp3 into `assets/music/` (mp3s are not in git). Never add music that is not in
+`assets/music/provenance.json` with YouTube confirmed. YouTube's API cannot attach trending sounds.
 
 The same hard rules below apply to the promo queue (use `promo_queue.py` for its `authorize`,
 `resolve --post N --video-id ID | --not-uploaded`, `clear-halt`, `schedule-install`).

@@ -201,7 +201,7 @@ Claude takes each requested episode from shotlist to an approved `master_9x16.mp
 - **Public publishing (owner-authorized 2026-11-26, promo Shorts only):** `config/promo_youtube.json` → `privacy` may be `public`, `unlisted` or `private`. The story queue stays private/unlisted. If YouTube returns a different visibility (it forces `private` until the API project passes YouTube's compliance audit), the queue halts and waits for the owner.
 - **Same safeguards as the story queue:** `containsSyntheticMedia` set, pinned channel, duplicate-proof ledger, halts wait for the owner.
 - **Separate from the story queue:** its own config, Keychain sign-in (`keyring_user`), ledger `state/promo_youtube_ledger.json`, halt file and launchd job `com.talenovi.promo-queue`. Only the upload lock is shared.
-- **Audio:** the YouTube API cannot attach trending or library sounds. Shorts carry a silent track unless `video.audio_file` names a YouTube-confirmed track in `assets/music/provenance.json`.
+- **Audio (owner-supplied 2026-11-26):** three YouTube Audio Library tracks rotate by post id (`video.audio_rotation` in `campaign.json`). Each Short lasts min(15 s, track length), at least 10 s, and its description credits the track. Tracks must be in `assets/music/provenance.json` (commercial use and YouTube confirmed, SHA-256 checked). The mp3 files are git-ignored and live only in `assets/music/` on the Mac. Changing a post's music or length re-renders it automatically. The YouTube API cannot attach trending sounds.
 - **Operate it** with the `youtube-uploader` agent. Post ids are permanent; new images are appended with the next id.
 
 ## v5 autopilot (separate, factual topic videos)
