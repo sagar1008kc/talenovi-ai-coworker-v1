@@ -42,7 +42,7 @@ Use `ln` (hard link, no extra disk space), never `cp`. Then run `next` to confir
 
 ## Promo Shorts queue (PilotMyCareer, owner-authorized 2026-11-25)
 A second, independent queue: `promo_queue.py`. One ad image becomes one 10 s 1080x1920 Short
-(rendered locally with ffmpeg, free) and uploads every **12 hours**, private or unlisted, to the
+(rendered locally with ffmpeg, free) and uploads every **12 hours**, public, unlisted or private per `config/promo_youtube.json` (public owner-authorized 2026-11-26 for promo Shorts only), to the
 channel pinned in `config/promo_youtube.json` (its own Keychain sign-in, ledger
 `state/promo_youtube_ledger.json`, halt file `state/promo_queue.HALT`, launchd job
 `com.talenovi.promo-queue`). It shares only the upload lock with the story queue.
@@ -79,7 +79,7 @@ The same hard rules below apply to the promo queue (use `promo_queue.py` for its
 - Never edit `state/youtube_ledger.json` or the config by hand. Never pass `--ignore-interval`,
   and never run `clear-halt`, `resolve`, `schedule-install` or `schedule-remove`, unless the owner
   asked for that exact action in this conversation.
-- Never make a video public and never upload to TikTok or anywhere else.
+- Never make a story video public and never upload to TikTok or anywhere else. The only public uploads are promo Shorts when `config/promo_youtube.json` says `"privacy": "public"` (owner-authorized 2026-11-26); never change that setting yourself.
 - If the queue is **halted** (unconfirmed upload, wrong channel, or YouTube did not keep the video
   unlisted), report the halt reason word for word and what the owner should check in YouTube Studio.
   For an unconfirmed upload the owner then runs either

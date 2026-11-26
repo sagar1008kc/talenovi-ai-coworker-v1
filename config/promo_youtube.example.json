@@ -1,12 +1,12 @@
 {
   "expected_channel_id": "UCxxxxxxxxxxxxxxxxxxxxxx",
-  "privacy": "unlisted",
+  "privacy": "public",
   "min_hours_between_uploads": 12,
   "category_id": "27",
   "contains_synthetic_media": true,
   "made_for_kids": false,
   "keyring_user": "promo-oauth-credentials",
   "campaigns": ["pilotmycareer"],
-  "_privacy_note": "private or unlisted only. Making a Short public stays a manual step in YouTube Studio.",
+  "_privacy_note": "private, unlisted or public (owner-authorized 2026-11-26, promo Shorts only). YouTube forces private until the Google Cloud project passes the YouTube API compliance audit; the queue then halts instead of posting more private Shorts.",
   "_setup": "Copy to config/promo_youtube.json and set expected_channel_id to the channel the PilotMyCareer Shorts go to (YouTube Studio > Settings > Channel > Advanced settings). It has its own Keychain sign-in (keyring_user), so it can be a different channel from the TaleNovi story queue. Then: promo_queue.py authorize, promo_queue.py next, promo_queue.py schedule-install."
 }

@@ -41,7 +41,9 @@ LEDGER_PATH = ROOT / "state" / "youtube_ledger.json"
 LOCK_PATH = ROOT / "state" / "youtube_upload.lock"
 HALT_PATH = ROOT / "state" / "youtube_queue.HALT"
 PRIVACY = "unlisted"                       # default; config "privacy" may be "private"
-ALLOWED_PRIVACY = ("private", "unlisted")   # never "public": promotion stays manual in YouTube Studio
+ALLOWED_PRIVACY = ("private", "unlisted")   # story queue: never "public"; promotion stays manual in YouTube Studio
+# Only a plan built with public_allowed=True (the PilotMyCareer promo queue, owner-authorized 2026-11-26)
+# may request "public". YouTube still forces "private" until the API project passes its compliance audit.
 
 MAX_TITLE_CHARS = 100
 MAX_DESCRIPTION_BYTES = 5000
@@ -166,9 +168,10 @@ class UploadPlan:
     privacy: str = PRIVACY
     tags: tuple[str, ...] = ()            # snippet.tags (search keywords, not shown to viewers)
     made_for_kids: bool | None = None     # status.selfDeclaredMadeForKids; None = channel default
+    public_allowed: bool = False          # set only by the owner-authorized promo queue
 
     def body(self) -> dict:
-        if self.privacy not in ALLOWED_PRIVACY:
+        if not (self.privacy in ALLOWED_PRIVACY or (self.privacy == "public" and self.public_allowed)):
             raise UploadError(f"privacy {self.privacy!r} is not allowed; uploads are private or unlisted only")
         status = {"privacyStatus": self.privacy}
         if self.contains_synthetic_media:

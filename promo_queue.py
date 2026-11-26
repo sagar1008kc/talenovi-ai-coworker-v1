@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Promo Shorts queue: one ad image -> one YouTube Short, every 12 hours.
 
-Owner-authorized 2026-11-25 for www.pilotmycareer.com. It reuses the story queue's
+Owner-authorized 2026-11-25 for www.pilotmycareer.com; publishing as public owner-authorized
+2026-11-26 (config "privacy": "public", this queue only). It reuses the story queue's
 uploader (studio/youtube_upload.py): channel pinning, OS-keychain OAuth, duplicate-proof
 ledger and the private/unlisted-only guard. It keeps its OWN config, ledger, halt file,
 keychain entry and launchd job, so the TaleNovi story queue is not affected.
@@ -84,6 +85,16 @@ def load_config(path: Path = CONFIG_PATH) -> dict:
         raise yt.UploadError("config/promo_youtube.json shares the story queue's sign-in but pins a different "
                              "channel; remove keyring_user or pin the same channel.")
     return cfg
+
+
+PROMO_PRIVACY = ("private", "unlisted", "public")
+
+
+def promo_privacy(cfg: dict) -> str:
+    privacy = cfg.get("privacy", "unlisted")
+    if privacy not in PROMO_PRIVACY:
+        raise yt.UploadError(f"config/promo_youtube.json privacy {privacy!r}: use one of {PROMO_PRIVACY}.")
+    return privacy
 
 
 def require_channel(cfg: dict) -> str:
@@ -174,8 +185,8 @@ def make_plan(post: Post, cfg: dict) -> yt.UploadPlan:
     return yt.UploadPlan(
         video=post.video, story=c["campaign"], story_slug=post.ledger_slug, episode=post.id, title=title,
         description=description, category_id=str(cfg["category_id"]),
-        contains_synthetic_media=bool(cfg["contains_synthetic_media"]), privacy=yt._privacy(cfg),
-        tags=tags, made_for_kids=cfg.get("made_for_kids"))
+        contains_synthetic_media=bool(cfg["contains_synthetic_media"]), privacy=promo_privacy(cfg),
+        tags=tags, made_for_kids=cfg.get("made_for_kids"), public_allowed=True)
 
 
 # --------------------------------------------------------------------------- render (local, free)

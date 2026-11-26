@@ -95,8 +95,19 @@ class QueueTests(unittest.TestCase):
         plan = pq.make_plan(self.posts[0], CFG)
         self.assertEqual(plan.description, "H\n\nA\n\nhttps://example.com\n\n#Shorts #X")
         self.assertEqual((plan.story_slug, plan.episode), ("promo-demo", 1))
+        self.assertEqual(pq.make_plan(self.posts[0], {**CFG, "privacy": "public"}).body()["status"]["privacyStatus"],
+                         "public")
         with self.assertRaises(yt.UploadError):
-            pq.make_plan(self.posts[0], {**CFG, "privacy": "public"}).body()
+            pq.make_plan(self.posts[0], {**CFG, "privacy": "everyone"})
+
+    def test_story_queue_still_refuses_public(self):
+        with self.assertRaises(yt.UploadError):
+            yt._privacy({"privacy": "public"})
+        v = self.tmp / "v.mp4"
+        v.write_bytes(b"x")
+        plan = yt.make_plan(v, "S", 1, "T", "Sum", "a", config={**CFG, "category_id": "24"})
+        with self.assertRaises(yt.UploadError):
+            yt.UploadPlan(**{**plan.__dict__, "privacy": "public"}).body()
 
     def test_changed_image_is_refused_before_render(self):
         self.posts[0].image.write_bytes(b"tampered")
