@@ -174,9 +174,10 @@ def make_plan(post: Post, cfg: dict) -> yt.UploadPlan:
     if not title or len(title) > yt.MAX_TITLE_CHARS:
         raise yt.UploadError(f"Post {post.id}: title must be 1-{yt.MAX_TITLE_CHARS} characters ({len(title)}).")
     hashtags = yt.normalize_hashtags(_dedupe([*c.get("base_hashtags", []), *p.get("hashtags", [])]))
+    hit = music_track(post)
     description = c["description_template"].format(
         hook=p["hook"].strip(), audience=p.get("audience", "").strip(), site=c["site"],
-        hashtags=" ".join(hashtags)).strip()
+        music=music_credit(hit[1] if hit else None), hashtags=" ".join(hashtags)).strip()
     description = re.sub(r"\n{3,}", "\n\n", description)
     yt._check_text("description", description)
     if len(description.encode()) > yt.MAX_DESCRIPTION_BYTES:
@@ -198,8 +199,25 @@ def ffmpeg_bin() -> str:
     raise yt.UploadError("ffmpeg not found (brew install ffmpeg).")
 
 
-def music_file(campaign: dict, provenance: Path = MUSIC_PROVENANCE) -> Path | None:
-    name = (campaign.get("video") or {}).get("audio_file")
+RENDER_VERSION = 2   # bump when render_args changes, so cached Shorts are re-rendered
+
+
+def audio_name(post: Post) -> str | None:
+    """The post's own `audio_file`, else the campaign's `audio_rotation` by post id (1->A, 2->B, 3->C, 4->A...),
+    else the campaign-wide `audio_file`, else None (silent)."""
+    if "audio_file" in post.data:
+        return post.data["audio_file"]
+    v = post.campaign.get("video") or {}
+    rotation = v.get("audio_rotation") or []
+    if rotation:
+        return rotation[(post.id - 1) % len(rotation)]
+    return v.get("audio_file")
+
+
+def music_track(post: Post, provenance: Path | None = None) -> tuple[Path, dict] | None:
+    """(file, provenance entry) for the post's music, verified, or None for a silent Short."""
+    provenance = provenance or MUSIC_PROVENANCE
+    name = audio_name(post)
     if not name:
         return None
     tracks = json.loads(provenance.read_text()).get("tracks", []) if provenance.exists() else []
@@ -207,7 +225,30 @@ def music_file(campaign: dict, provenance: Path = MUSIC_PROVENANCE) -> Path | No
     if not track or not track.get("commercial_use_confirmed") or "youtube" not in track.get("platforms_confirmed", []):
         raise yt.UploadError(f"audio_file {name!r} is not listed in {provenance.name} with commercial use and "
                              "YouTube confirmed; not using it.")
-    return safe_path(provenance.parent, name)
+    path = safe_path(provenance.parent, name)
+    if not path.is_file():
+        raise yt.UploadError(f"Music file missing: {path.relative_to(ROOT) if ROOT in path.parents else path}. "
+                             f"Copy \"{track.get('title')}\" there (it is not in git).")
+    if track.get("sha256") and yt.sha256_file(path) != track["sha256"]:
+        raise yt.UploadError(f"{path.name} is not the track recorded in {provenance.name} (SHA-256 differs).")
+    return path, track
+
+
+def post_seconds(post: Post, track: dict | None) -> float:
+    """Shorts run `seconds` (max, default 15) but never past the music: min(max, track length),
+    and never under `min_seconds` (default 10)."""
+    v = post.campaign.get("video") or {}
+    longest, shortest = float(v.get("seconds", 15)), float(v.get("min_seconds", 10))
+    if track and track.get("duration_seconds"):
+        longest = min(longest, float(track["duration_seconds"]))
+    return round(max(shortest, longest), 2)
+
+
+def music_credit(track: dict | None) -> str:
+    if not track:
+        return ""
+    who = track.get("artist")
+    return f"Music: {track.get('title')}" + (f" by {who}" if who else "") + f" ({track.get('source', 'YouTube Audio Library')})"
 
 
 def render_args(image: Path, out: Path, seconds: float, zoom: float, music: Path | None, ff: str) -> list[str]:
@@ -220,8 +261,8 @@ def render_args(image: Path, out: Path, seconds: float, zoom: float, music: Path
           f"zoompan=z='1+{zoom}*on/{frames}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={frames}:s={W}x{H}:fps={FPS},"
           f"format=yuv420p,setsar=1[v]")
     if music:
-        audio_in = ["-i", str(music)]
-        af = (f";[1:a]atrim=0:{seconds},asetpts=PTS-STARTPTS,afade=t=in:d=0.3,"
+        audio_in = ["-stream_loop", "-1", "-i", str(music)]   # loops a track shorter than the Short
+        af = (f";[1:a]atrim=0:{seconds},asetpts=PTS-STARTPTS,aformat=channel_layouts=stereo,afade=t=in:d=0.05,"
               f"afade=t=out:st={max(0.0, seconds - 1.0)}:d=1,loudnorm=I=-14:TP=-1.5,aresample=48000[aud]")
     else:
         audio_in = ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
@@ -243,22 +284,30 @@ def build(post: Post, *, force: bool = False, runner=subprocess.run) -> Path:
     if want and yt.sha256_file(img) != want:
         raise yt.UploadError(f"Post {post.id}: {img.name} changed since it was added (SHA-256 differs); "
                              "not using it.")
-    if post.video.exists() and not force:
-        return post.video
+    hit = music_track(post)
+    path, track = hit if hit else (None, None)
     v = post.campaign.get("video") or {}
+    seconds, zoom = post_seconds(post, track), float(v.get("zoom", 0.04))
+    # Re-render when anything that shapes the Short changed (e.g. music added after a silent render).
+    fingerprint = {"render_version": RENDER_VERSION, "image_sha256": yt.sha256_file(img), "seconds": seconds,
+                   "zoom": zoom, "audio": path.name if path else None,
+                   "audio_sha256": yt.sha256_file(path) if path else None}
+    stamp = post.video.with_suffix(".render.json")
+    if post.video.exists() and not force and stamp.exists() and json.loads(stamp.read_text()) == fingerprint:
+        return post.video
     post.video.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp = tempfile.mkstemp(dir=post.video.parent, prefix=".render-", suffix=".mp4")
     os.close(fd)
     try:
-        r = runner(render_args(img, Path(tmp), float(v.get("seconds", 10)), float(v.get("zoom", 0.04)),
-                               music_file(post.campaign), ffmpeg_bin()), capture_output=True, text=True)
+        r = runner(render_args(img, Path(tmp), seconds, zoom, path, ffmpeg_bin()), capture_output=True, text=True)
         if r.returncode != 0:
             raise yt.UploadError(f"Post {post.id}: ffmpeg failed: {(r.stderr or '').strip()[-400:]}")
         os.replace(tmp, post.video)
+        stamp.write_text(json.dumps(fingerprint, indent=2) + "\n")
     finally:
         if os.path.exists(tmp):
             os.unlink(tmp)
-    log.info("Rendered post %02d -> %s", post.id, post.video)
+    log.info("Rendered post %02d (%.1f s, music: %s) -> %s", post.id, seconds, path.name if path else "none", post.video)
     return post.video
 
 

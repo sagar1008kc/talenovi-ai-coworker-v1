@@ -9,6 +9,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -123,7 +124,7 @@ class QueueTests(unittest.TestCase):
         out = pq.build(self.posts[1], runner=runner)
         self.assertEqual(out.read_bytes(), b"mp4")
         self.assertEqual(out.name, "demo_post02.mp4")
-        self.assertEqual([f.name for f in out.parent.iterdir()], ["demo_post02.mp4"])
+        self.assertEqual(sorted(f.name for f in out.parent.iterdir()), ["demo_post02.mp4", "demo_post02.render.json"])
 
     def test_channel_must_be_pinned_and_music_needs_provenance(self):
         with self.assertRaises(yt.UploadError):
@@ -132,8 +133,57 @@ class QueueTests(unittest.TestCase):
         prov.write_text(json.dumps({"tracks": [{"file": "a.mp3", "commercial_use_confirmed": True,
                                                 "platforms_confirmed": ["tiktok"]}]}))
         with self.assertRaises(yt.UploadError):
-            pq.music_file({"video": {"audio_file": "a.mp3"}}, prov)
-        self.assertIsNone(pq.music_file({"video": {}}, prov))
+            pq.music_track(pq.Post({"video": {"audio_file": "a.mp3"}}, {"id": 1}), prov)
+        self.assertIsNone(pq.music_track(pq.Post({"video": {}}, {"id": 1}), prov))
+
+    def music_setup(self):
+        prov = self.tmp / "music" / "provenance.json"
+        prov.parent.mkdir()
+        tracks = []
+        for name, secs in (("a.mp3", 20.7), ("b.mp3", 12.0)):
+            (prov.parent / name).write_bytes(name.encode())
+            tracks.append({"file": name, "title": name.upper(), "artist": "X", "commercial_use_confirmed": True,
+                           "platforms_confirmed": ["youtube"], "duration_seconds": secs,
+                           "sha256": yt.sha256_file(prov.parent / name)})
+        prov.write_text(json.dumps({"tracks": tracks}))
+        return prov
+
+    def test_audio_rotation_duration_and_credit(self):
+        prov = self.music_setup()
+        camp = {**self.posts[0].campaign, "video": {"seconds": 15, "min_seconds": 10,
+                                                    "audio_rotation": ["a.mp3", "b.mp3"]}}
+        got = []
+        for i in (1, 2, 3):
+            post = pq.Post(camp, {"id": i})
+            path, track = pq.music_track(post, prov)
+            got.append((path.name, pq.post_seconds(post, track)))
+        self.assertEqual(got, [("a.mp3", 15.0), ("b.mp3", 12.0), ("a.mp3", 15.0)])
+        self.assertEqual(pq.music_credit({"title": "T", "artist": "A"}), "Music: T by A (YouTube Audio Library)")
+        self.assertEqual(pq.music_track(pq.Post(camp, {"id": 2, "audio_file": None}), prov), None)
+        (prov.parent / "b.mp3").write_bytes(b"swapped")
+        with self.assertRaises(yt.UploadError):
+            pq.music_track(pq.Post(camp, {"id": 2}), prov)
+        (prov.parent / "a.mp3").unlink()
+        with self.assertRaises(yt.UploadError):
+            pq.music_track(pq.Post(camp, {"id": 1}), prov)
+
+    def test_silent_render_is_redone_when_music_is_added(self):
+        calls = []
+
+        def runner(args, **kw):
+            calls.append(args)
+            Path(args[-1]).write_bytes(b"mp4")
+            return SimpleNamespace(returncode=0, stderr="")
+        post = self.posts[1]
+        pq.build(post, runner=runner)
+        pq.build(post, runner=runner)
+        self.assertEqual(len(calls), 1)          # cached
+        prov = self.music_setup()
+        post.campaign["video"] = {"audio_rotation": ["a.mp3"]}
+        with mock.patch.object(pq, "MUSIC_PROVENANCE", prov):
+            pq.build(post, runner=runner)
+        self.assertEqual(len(calls), 2)          # settings changed -> re-rendered
+        self.assertIn("-stream_loop", calls[-1])
 
     def test_tag_limit(self):
         with self.assertRaises(yt.UploadError):

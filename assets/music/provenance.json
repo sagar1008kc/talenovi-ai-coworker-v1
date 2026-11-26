@@ -6,10 +6,57 @@
       "title": "Winter, Largo from The Four Seasons, Op. 8 (Antonio Vivaldi), Golden Cut Reborn",
       "license": "YouTube Audio Library (per owner, 2026-11-20). Free for use in YouTube videos including monetized ones; check the library's attribution requirement for this track. Use outside YouTube (e.g. TikTok) is not confirmed.",
       "commercial_use_confirmed": true,
-      "platforms_confirmed": ["youtube"],
+      "platforms_confirmed": [
+        "youtube"
+      ],
       "source_url": "https://studio.youtube.com (Audio Library)",
       "mood": "tender, wistful, wintry, slow strings with pizzicato",
       "duration_seconds": 116.4
+    },
+    {
+      "file": "dyalla_bodega_cat_loop.mp3",
+      "title": "Bodega Cat Loop",
+      "artist": "Dyalla",
+      "source": "YouTube Audio Library",
+      "license": "YouTube Audio Library (per owner, 2026-11-26). Free for use in YouTube videos including monetized ones. Credited in each Short's description in case the track requires attribution. Use outside YouTube is not confirmed.",
+      "commercial_use_confirmed": true,
+      "platforms_confirmed": [
+        "youtube"
+      ],
+      "source_url": "https://studio.youtube.com (Audio Library)",
+      "mood": "upbeat, playful loop",
+      "duration_seconds": 20.69,
+      "sha256": "f12ffb74d060644c79c33fb2fa51f032371b10580895488d0881da5ee923348d"
+    },
+    {
+      "file": "battle_crowd_celebration.mp3",
+      "title": "Battle Crowd Celebration",
+      "artist": null,
+      "source": "YouTube Audio Library",
+      "license": "YouTube Audio Library (per owner, 2026-11-26). Free for use in YouTube videos including monetized ones. Credited in each Short's description in case the track requires attribution. Use outside YouTube is not confirmed.",
+      "commercial_use_confirmed": true,
+      "platforms_confirmed": [
+        "youtube"
+      ],
+      "source_url": "https://studio.youtube.com (Audio Library)",
+      "mood": "celebratory, energetic",
+      "duration_seconds": 26.51,
+      "sha256": "ac1871f973b32e1b0157b4ee7fe04fe95a625f7a03e12ac527a8f7d98d0f0fdf"
+    },
+    {
+      "file": "baila_mi_cumbia_sting.mp3",
+      "title": "Baila Mi Cumbia (Sting)",
+      "artist": "Jimmy Fontanez/Media Right Productions",
+      "source": "YouTube Audio Library",
+      "license": "YouTube Audio Library (per owner, 2026-11-26). Free for use in YouTube videos including monetized ones. Credited in each Short's description in case the track requires attribution. Use outside YouTube is not confirmed.",
+      "commercial_use_confirmed": true,
+      "platforms_confirmed": [
+        "youtube"
+      ],
+      "source_url": "https://studio.youtube.com (Audio Library)",
+      "mood": "bright, festive sting",
+      "duration_seconds": 12.02,
+      "sha256": "3d262d01f0a1fe6d91a4806cab40beb8f793d0ea9bb8a5c3c48ea33b5ce7d0d1"
     }
   ]
 }
